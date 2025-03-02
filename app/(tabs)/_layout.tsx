@@ -4,14 +4,12 @@ import React from "react";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-// Define the type for the stack navigation
 type RootStackParamList = {
   index: undefined;
   "add-task": undefined;
-  "edit-task": undefined;
+  "edit-task": { id: number };
 };
 
-// Explicitly type the navigation hook
 export type NavigationProp = StackNavigationProp<RootStackParamList, "index">;
 
 export default function TabLayout() {
