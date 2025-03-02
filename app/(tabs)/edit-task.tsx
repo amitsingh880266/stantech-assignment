@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, Alert, StyleSheet } from "react-native";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store";
-import { toggleTodoStatus, fetchTodos } from "@/store/todoSlice";
+import { updateTodo, fetchTodos } from "@/store/todoSlice";
 import { NavigationProp } from "./_layout";
 
 type EditTaskRouteProp = RouteProp<{ params: { id: number } }, "params">;
@@ -32,7 +32,7 @@ export default function EditTaskScreen() {
   }, [id]);
 
   const handleUpdateTask = () => {
-    dispatch(toggleTodoStatus({ id, completed }));
+    dispatch(updateTodo({ id, title, completed }));
     Alert.alert("Success", "Task updated successfully");
     navigation.goBack();
   };
@@ -45,7 +45,6 @@ export default function EditTaskScreen() {
         placeholder="Task name"
         value={title}
         onChangeText={setTitle}
-        editable={false}
       />
       <View style={styles.buttonContainer}>
         <Button

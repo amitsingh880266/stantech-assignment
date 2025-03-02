@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { View, Text, Button } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { NavigationProp } from "./_layout";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTodos, createTodo } from "@/store/todoSlice";
@@ -13,10 +13,13 @@ export default function HomeScreen() {
   const dispatch = useDispatch<AppDispatch>();
   const todos = useSelector((state: RootState) => state.todos.todos);
   const loading = useSelector((state: RootState) => state.todos.loading);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    dispatch(fetchTodos());
-  }, [dispatch]);
+    if (isFocused) {
+      dispatch(fetchTodos());
+    }
+  }, [dispatch, isFocused]);
 
   return (
     <View style={styles.container}>

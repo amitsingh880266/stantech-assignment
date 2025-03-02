@@ -68,6 +68,18 @@ In the output, you'll find options to open the app in a:
 - Mark tasks as completed
 - View a list of tasks
 
+## Application Features
+
+- Add new tasks
+- Edit existing tasks
+- Delete tasks
+- Mark tasks as completed
+- View a list of tasks
+
+![Add Task](./assets/images/AddTask.png)
+![Edit Task](./assets/images/EditTask.png)
+![Home](./assets/images/Home.png)
+
 ## Learn More
 
 To learn more about developing your project with Expo, look at the following resources:

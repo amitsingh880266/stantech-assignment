@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import todoService from "@/services/todoService";
 import { Todo } from "@/types/todo";
 
@@ -15,8 +15,8 @@ const initialState: TodoState = {
 };
 
 export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
-  const todos = await todoService.getTodos();
-  return todos;
+  const response = await todoService.getTodos();
+  return response;
 });
 
 export const createTodo = createAsyncThunk(
@@ -45,6 +45,23 @@ export const deleteTodo = createAsyncThunk(
   }
 );
 
+export const updateTodo = createAsyncThunk(
+  "todos/updateTodo",
+  async ({
+    id,
+    title,
+    completed,
+  }: {
+    id: number;
+    title: string;
+    completed: boolean;
+  }) => {
+    await todoService.updateTodo(id, { title, completed });
+    const updatedTodo = await todoService.getTodoById(id);
+    return updatedTodo;
+  }
+);
+
 const todoSlice = createSlice({
   name: "todos",
   initialState,
@@ -55,7 +72,7 @@ const todoSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchTodos.fulfilled, (state, action) => {
+      .addCase(fetchTodos.fulfilled, (state, action: PayloadAction<Todo[]>) => {
         state.loading = false;
         state.todos = action.payload;
       })
@@ -71,6 +88,14 @@ const todoSlice = createSlice({
       })
       .addCase(deleteTodo.fulfilled, (state, action) => {
         state.todos = state.todos.filter((todo) => todo.id !== action.payload);
+      })
+      .addCase(updateTodo.fulfilled, (state, action: PayloadAction<Todo>) => {
+        const index = state.todos.findIndex(
+          (todo) => todo.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.todos[index] = action.payload;
+        }
       });
   },
 });

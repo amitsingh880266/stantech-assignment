@@ -35,6 +35,20 @@ class TodoService {
   public async deleteTodo(id: number): Promise<void> {
     await this.db.runAsync("DELETE FROM todos WHERE id = ?;", [id]);
   }
+
+  public async updateTodo(id: number, data: Partial<Todo>): Promise<void> {
+    await this.db.runAsync(
+      "UPDATE todos SET title = ?, completed = ? WHERE id = ?;",
+      [data.title, data.completed ? 1 : 0, id]
+    );
+  }
+
+  public async getTodoById(id: number): Promise<Todo> {
+    const result = await this.db.getAsync("SELECT * FROM todos WHERE id = ?;", [
+      id,
+    ]);
+    return result as Todo;
+  }
 }
 
 const todoService = new TodoService();
